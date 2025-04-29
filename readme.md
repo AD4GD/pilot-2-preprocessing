@@ -35,6 +35,11 @@ To execute Jupyter Notebook users need to either:
 - navigate to http:localhost:9999 or
 - copy URL with token from the console and paste it to browser or another tool used to run Jupyter Notebook (for example, *http://localhost:9999/?token=abcd123400000000000000000000000*)
 
+If you are experiencing issues with building Docker image, try to replace in `Dockerfile` the following line: \
+`FROM ghcr.io/osgeo/gdal:ubuntu-small-3.9.2 AS base` with \
+`FROM ghcr.io/osgeo/gdal:ubuntu-small-latest` or \
+`FROM ghcr.io/osgeo/gdal:ubuntu-full-latest AS base`
+
 Now, everything is prepared to execute the Jupyter Notebooks within a Docker environment.
 
 #### Impact

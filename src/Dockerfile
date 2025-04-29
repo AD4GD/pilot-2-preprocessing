@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
-FROM ghcr.io/osgeo/gdal:ubuntu-small-latest AS base
-# alternative if small docker image does not work:
+FROM ghcr.io/osgeo/gdal:ubuntu-small-3.9.2 AS base
+# alternatives: if this docker image does not work:
+# FROM ghcr.io/osgeo/gdal:ubuntu-small-latest
 # FROM ghcr.io/osgeo/gdal:ubuntu-full-latest AS base
 WORKDIR /app
 
