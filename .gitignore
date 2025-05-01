@@ -63,6 +63,7 @@ src/data/output/*
 src/data/input/affinity/*
 src/data/input/protected_areas/*
 src/data/input/vector/*
+**/*.tif.aux.xml
 
 # Distribution / packaging
 .Python

@@ -3,16 +3,16 @@ initial_lulc:
   stressor_lulc_107_2017:
     decline_type: prop_decline
     exp_decline:
-      lambda_decay: 9
+      lambda_decay: 0
     prop_decline:
-      k_value: 0
+      k_value: 9
     types: null
   stressor_lulc_7_2017:
     decline_type: prop_decline
     exp_decline:
-      lambda_decay: 7
+      lambda_decay: 0
     prop_decline:
-      k_value: 0
+      k_value: 7
     types: null
 vector:
   enabled: true
