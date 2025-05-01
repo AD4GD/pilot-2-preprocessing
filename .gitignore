@@ -60,9 +60,9 @@ __pycache__/
 # output and intermediate data
 src/data/output/*
 **/*_pa.tif
-src/data/input/affinity
-src/data/input/protected_areas
-src/data/input/vector
+src/data/input/affinity/*
+src/data/input/protected_areas/*
+src/data/input/vector/*
 
 # Distribution / packaging
 .Python

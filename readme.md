@@ -56,11 +56,13 @@ As a rule of thumb, it is recommended to use input land-use/land-cover (LULC) da
 2. You have a corresponding landscape impedance/resistance dataset in GeoTIFF format [here](src/data/input/impedance), which filename ends with year, for example `impedance_lulc_esa_2017.tif`. You have also put the filename of impedance dataset to the [configuration file](src/config/config.yaml) in `impedance_tif` key.
 
 
-3. You also have a table [here](src/data/input/impedance) that maps all LULC categories from the 1st input with the values from the 2nd input. Do not rename columns as it might break some parts of Notebooks. \
+3. You also have a table [here](src/data/input/impedance) that maps all LULC categories from the 1st input with the values from the 2nd input. Do not rename columns as it might break some parts of Notebooks.
+
 You should have five columns:
+
 | lulc | impedance |  type  | edge_effect | vector_refine |
 |------|-----------|--------|-------------|---------------|
-|  1   |     100   |  roads |      1      |       1       |
+|  1   |    100    | roads  |      1      |       1       |
 |  2   |     5     | forest |      0      |       0       |
 
 - `lulc` points out the LULC category from the input LULC raster file
