@@ -49,33 +49,34 @@ Each Notebook is also supplied by the timing code to test performance.
 
 As a rule of thumb, it is recommended to use input land-use/land-cover (LULC) datasets of reasonable extents, covering areas similar to Catalonia, Spain or Northern England (69 925 km<sup>2</sup> and 20 650 km<sup>2</sup>, respectively) to avoid issues related to API throttling.
 
-**ATTENTION: before running the Notebook, make sure that:**
-1. You have at least one land-use/land-cover dataset in GeoTIFF format [here](data/input/lulc), which filename ends with a year, for example `lulc_esa_2017.tif`. You have also specified the impedance dataset filename in the [configuration file](config/config.yaml) in `lulc` key.
+**ATTENTION: before running the Notebooks, make sure that:**
+1. You have at least one land-use/land-cover dataset in GeoTIFF format [here](src/data/input/lulc), which filename ends with a year, for example `lulc_esa_2017.tif`. You have also specified the impedance dataset filename in the [configuration file](src/config/config.yaml) in `lulc` key.
 
 
-2. You have a corresponding landscape impedance/resistance dataset in GeoTIFF format [here](data/input/impedance), which filename ends with year, for example `impedance_lulc_esa_2017.tif`. You have also put the filename of impedance dataset to the [configuration file](config/config.yaml) in `impedance_tif` key.
+2. You have a corresponding landscape impedance/resistance dataset in GeoTIFF format [here](src/data/input/impedance), which filename ends with year, for example `impedance_lulc_esa_2017.tif`. You have also put the filename of impedance dataset to the [configuration file](src/config/config.yaml) in `impedance_tif` key.
 
 
-3. You also have a table [here](data/input/impedance) that maps all LULC categories from the 1st input with the values from the 2nd input. Do not rename columns as it might break some parts of Notebooks. \
+3. You also have a table [here](src/data/input/impedance) that maps all LULC categories from the 1st input with the values from the 2nd input. Do not rename columns as it might break some parts of Notebooks. \
 You should have five columns:
 | lulc | impedance |  type  | edge_effect | vector_refine |
 |------|-----------|--------|-------------|---------------|
 |  1   |     100   |  roads |      1      |       1       |
 |  2   |     5     | forest |      0      |       0       |
+
 - `lulc` points out the LULC category from the input LULC raster file
 - `impedance` defines the value of landscape impedance for this LULC category, derived from expert knowledge or found out by users from bibliography.
 - `type` is what this LULC category describes.
 - `edge_effect` is a boolean parameter - if 1 (`True`), this LULC category will be considered a 'biodiversity stressor' in the [4th Notebook](src/4_impedance.ipynb). If 0 (`False`), it won't be considered a stressor, so it won't update the initial impedance dataset.
 - `vector_refine` is a boolean parameter - if 1 (`True`), this LULC category will be enriched with vector data from OpenStreetMap. If 0 (`False`), it will be just saved from the input LULC raster file, if not overwritten by overlaying features from fetched data.
 
-You have also put the filename of impedance dataset to the [configuration file](config/config.yaml) in `impedance` key.
+You have also put the filename of impedance dataset to the [configuration file](src/config/config.yaml) in `impedance` key.
 
 
 4. You have defined which LULC categories roads, railways and water features from vector data matches. For example, road and railways are described by the LULC=7 in the sample input dataset, and LULC=1 for water features. \
-Check `lulc_codes` in the [configuration file](config/config.yaml).
+Check `lulc_codes` in the [configuration file](src/config/config.yaml).
 
 
-5. You've received Protected Planet API token and put it to the [configuration file](config/config.yaml) in `token` key. You will only need it to run the [First Notebook](src/1_pas.ipynb) though.
+5. You've received Protected Planet API token and put it to the [configuration file](src/config/config.yaml) in `token` key. You will only need it to run the [First Notebook](src/1_pas.ipynb) though.
 
 
 **NOTEBOOK DESCRIPTIONS**
@@ -88,12 +89,21 @@ This workflow describes the enrichment of LULC data with protected areas. It pro
 
 **Attention!** you need to obtain first personal credentials for Protected Planet API. Granting access to the API is not automatic and reviewed by the Protected Planet team.
 
+Outputs from this Notebook are saved in the input directory, as they can be used as input in the next Notebooks:
+- [enriched LULC dataset](src/data/input/lulc) with `pa` suffix in the filename, GeoTIFF
+- [enriched landscape impedance dataset](src/data/input/impedance) with `pa` suffix in the filename, GeoTIFF
+- [landscape affinity dataset](src/data/input/affinity) with `pa` suffix in the filename, GeoTIFF
+
+
 2. [**Second Notebook**](src/2_vector.ipynb) extracts and cleans up data from OpenStreetMap (OSM) database at various timestamps. \
-This block uses [Overpass Turbo API](https://wiki.openstreetmap.org/wiki/Overpass_API) applied to fetch specific types of OSM features, including human-built infrastructure (roads and railways) and mostly natural features (inland waters - waterways and water bodies). Compared to the v.1.0.0, we have also excluded bridges and tunnels from Overpass Turbo API queries as they do not act as ecological barriers between habitats.
+This block uses [Overpass Turbo API](https://wiki.openstreetmap.org/wiki/Overpass_API) applied to fetch specific types of OSM features, including human-built infrastructure (roads and railways) and mostly natural features (inland waters - waterways and water bodies). Compared to the v.1.0.0, we have also excluded bridges and tunnels from Overpass Turbo API queries as they do not act as ecological barriers between habitats. \
+This block will provide user with OSM vector data by each year specified in the configuration file.
 
 This block has multiple limitations, which can be explored in the Notebook, but the most important is timeline - OSM data through Overpass Turbo API are available from the earlier 2010s, which might lack a significant number of features compared to the current timestamp.
 
-This block will provide user with OSM vector data by each year specified in the configuration file.
+Outputs from this Notebook are saved to the following paths:
+- [merged OSM features by year](src/data/input/vector), GPKG
+- [intermediate OSM features](src/data/output/osm_data), JSON, which might be deleted by user later on to clean up directory
 
 3. [**Third Notebook**](src/3_enrichment.ipynb)
 
@@ -104,7 +114,11 @@ Currently, this workflow has been successfully applied to enrich [MUCSC maps of 
 Three types of input data are used:
 1. Raster land-use/land-cover (LULC) data, GeoTIFF format. ***MANDATORY***
 2. Vector data (GPKG) to enrich and refine LULC data (currently, roads, railways, water bodies and waterways are processed) derived either from OSM or user-specified data. ***MANDATORY***
-3. Tabular (CSV) data mapping LULC types to their specifications: (1) whether concrete LULC type should be refined by vector data or not (***MANDATORY***) and (2) whether negative "edge effect" of concrete LULC type should be considered, for instance, roads affect suitability of habitats alongside roads (***OPTIONAL***). This reclassification table is being used in the [first block](1_pas.ipynb) of the Data4Land tool.
+3. Tabular (CSV) data mapping LULC types to their specifications: (1) whether concrete LULC type should be refined by vector data or not (***MANDATORY***) and (2) whether negative "edge effect" of concrete LULC type should be considered, for instance, roads affect suitability of habitats alongside roads (***OPTIONAL***). This reclassification table is being used in the [first block](src/1_pas.ipynb) of the Data4Land tool.
+
+Outputs from this Notebook are saved here:
+- [enriched LULC dataset](src/data/output) with `upd` suffix, GeoTIFF
+- [rasterised categories of OSM features](src/data/output), GeoTIFF
 
 4. [**Third Notebook**](src/4_impedance.ipynb)
 

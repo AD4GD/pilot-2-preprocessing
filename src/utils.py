@@ -109,7 +109,7 @@ def find_stressor_params(config_dict:dict, search_key:str):
             if search_key in config_dict:
                 return config_dict[search_key]
             # Recurse through each key-value pair in the dictionary
-            for key, value in config_dict.items():
+            for value in config_dict.values():
                 stressor_params = find_stressor_params(value, search_key)
                 if stressor_params is not None:
                     return stressor_params

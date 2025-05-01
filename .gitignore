@@ -48,13 +48,21 @@ cwl/
 .virtual_documents/
 
 # ignore some too large files
-data/input/vector/osm_merged_2023.gpkg
-data/input/vector/osm_merged_2022.gpkg
+src/data/input/vector/osm_merged_2023.gpkg
+src/data/input/vector/osm_merged_2022.gpkg
 
 # Byte-compiled / optimized / DLL files
 pycache/
 *.py[cod]
 *$py.class
+__pycache__/
+
+# output and intermediate data
+src/data/output/*
+**/*_pa.tif
+src/data/input/affinity
+src/data/input/protected_areas
+src/data/input/vector
 
 # Distribution / packaging
 .Python
@@ -113,9 +121,6 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# exclude from nested directory
-1_protected_areas/.ipynb_checkpoints/
-1_protected_areas/cache/
 
 # Translations
 *.mo
