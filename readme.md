@@ -139,7 +139,7 @@ In v.2.0.0, user can specify whether they would like to use [Overpass Turbo](htt
 
 **3d**:
 ```bash
-python main.py enrich-lulc --config-dir ./config --verbose --save-osm-stressors
+python main.py enrich-lulc --api ohsome --config-dir ./config --verbose --save-osm-stressors
 ```
 This component enriches the input land-use/land-cover (LULC) dataset with the fetched OSM data.
 If user would like to execute the 4th component later on, they should enable `--save-osm-stressors` to use these intermediate GeoTIFF outputs (biodiversity stressors) in the recalculation of landscape impedance. However, the enabled parameter will require additional time to process the stressors.
